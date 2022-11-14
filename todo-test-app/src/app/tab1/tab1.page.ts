@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TodoService } from '../services/todo.service';
 
 @Component({
   selector: 'app-tab1',
@@ -7,7 +8,9 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
   todos: String[] = [];
-  constructor() {}
+  constructor(private todoService: TodoService) {
+    this.todos = this.todoService.getTodos()
+  }
 
   addTodo(todo: string){
     this.todos.push(todo);

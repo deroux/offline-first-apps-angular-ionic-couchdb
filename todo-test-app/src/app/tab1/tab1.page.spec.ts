@@ -27,5 +27,18 @@ describe('Tab1Page', () => { // creates test suite
   it('should create', () => { // test Case, 1 spec, one test in the suite
     expect(component).toBeTruthy();
   });
+
+  it('todos should be an array', () => { 
+    expect(component.todos.length).toBeDefined();
+  });
+  
+  it('addTodo should add the todo string to todos array', () => {
+    const todo = 'My new Todo';
+    // action part
+    component.addTodo(todo); // action part
+    
+    expect(component.todos.length).toBeGreaterThan(0);
+    expect(component.todos).toContain(todo);
+  });
 });
 

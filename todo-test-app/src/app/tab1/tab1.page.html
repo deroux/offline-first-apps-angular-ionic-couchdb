@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Todos
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -12,6 +12,12 @@
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <ion-list>
+    <ion-item *ngFor="let todo of todos$ | async">
+      <ion-label>
+        <h3>{{todo.name}}</h3>
+        <p>{{todo.description}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

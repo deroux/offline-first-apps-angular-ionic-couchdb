@@ -14,8 +14,8 @@
   </ion-header>
   <ion-item>
     <ion-label>Todo text:</ion-label>
-    <ion-input #myinput></ion-input>
-    <ion-button (click)="onAddTodo(myinput.value.toString())">Add</ion-button>
+    <ion-input [(ngModel)]="myinput"></ion-input>
+    <ion-button (click)="onAddTodo()">Add</ion-button>
   </ion-item>
   <ion-list>
     <ion-item *ngFor="let todo of todos">

@@ -7,10 +7,12 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
   todos: String[] = ['Do work', 'Clean room']
+  myinput: String;
 
   constructor() {}
 
-  onAddTodo(todo: String) {
-    this.todos.push(todo);
+  onAddTodo() {
+    this.todos.push(this.myinput);
+    this.myinput = '';
   }
 }

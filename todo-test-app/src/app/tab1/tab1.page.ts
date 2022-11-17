@@ -1,5 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { TodoService } from '../services/todo.service';
+
 
 @Component({
   selector: 'app-tab1',
@@ -8,7 +11,9 @@ import { TodoService } from '../services/todo.service';
 })
 export class Tab1Page {
   todos: String[] = [];
-  constructor(private todoService: TodoService) {
+  todos$: Observable<Object>; 
+  constructor(private todoService: TodoService, private http: HttpClient) {
+    this.todos$ = this.http.get('/api/todos');
     this.todos = this.todoService.getTodos()
   }
 

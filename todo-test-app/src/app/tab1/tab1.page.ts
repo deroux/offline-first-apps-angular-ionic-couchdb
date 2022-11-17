@@ -6,7 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
+  todos: String[] = ['Do work', 'Clean room']
 
   constructor() {}
 
+  onAddTodo(todo: String) {
+    this.todos.push(todo);
+  }
 }

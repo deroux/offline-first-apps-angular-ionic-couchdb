@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TableService } from 'src/app/services/table/table.service';
 
 @Component({
   selector: 'app-tables',
@@ -6,25 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./tables.page.scss'],
 })
 export class TablesPage implements OnInit {
-  tables = [
-    {
-      type: 'table',
-      table: {
-        id: '1',
-        guests: 6,
-        state: 'free',
-      },
-    },
-    {
-      type: 'table',
-      table: {
-        id: '2',
-        guests: 4,
-        state: 'dirty',
-      },
-    },
-  ];
-  constructor() {}
+  tables: any;
+  constructor(private tableService: TableService) {}
 
   ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.tableService.getCurrentTables().subscribe((tableDocs) => {
+      console.warn(tableDocs);
+      this.tables = tableDocs;
+    });
+    this.tableService.fetchTables();
+  }
 }

@@ -14,7 +14,6 @@ export class TablesPage implements OnInit {
 
   ngAfterViewInit() {
     this.tableService.getCurrentTables().subscribe((tableDocs) => {
-      console.warn(tableDocs);
       this.tables = tableDocs;
     });
     this.tableService.fetchTables();

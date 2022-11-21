@@ -1,5 +1,14 @@
 import { Injectable } from '@angular/core';
-import { catchError, from, map, Observable, of, Subject, take } from 'rxjs';
+import {
+  catchError,
+  from,
+  map,
+  Observable,
+  of,
+  Subject,
+  Subscription,
+  take,
+} from 'rxjs';
 import { DbService } from '../db/db.service';
 
 @Injectable({
@@ -7,8 +16,31 @@ import { DbService } from '../db/db.service';
 })
 export class TableService {
   tablesSubject = new Subject();
+  subscriptions: Array<Subscription> = [];
 
-  constructor(private dbService: DbService) {}
+  constructor(private dbService: DbService) {
+    this.initChangeHandler();
+  }
+
+  initChangeHandler() {
+    let sub: Subscription = this.dbService
+      .getCurrentTableChanges()
+      .subscribe((changed) => {
+        if (changed) {
+          console.warn('handleChange called');
+          this.handleChange();
+        }
+      });
+    this.subscriptions.push(sub);
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach((s) => s.unsubscribe());
+  }
+
+  handleChange() {
+    this.fetchTables();
+  }
 
   fetchTables() {
     let query = {

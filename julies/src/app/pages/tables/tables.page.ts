@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TableDoc } from 'src/app/model/table';
 import { TableService } from 'src/app/services/table/table.service';
 
 @Component({
@@ -7,7 +8,7 @@ import { TableService } from 'src/app/services/table/table.service';
   styleUrls: ['./tables.page.scss'],
 })
 export class TablesPage implements OnInit {
-  tables: any;
+  tables: Array<TableDoc> = new Array<TableDoc>();
   constructor(private tableService: TableService) {}
 
   ngOnInit() {}

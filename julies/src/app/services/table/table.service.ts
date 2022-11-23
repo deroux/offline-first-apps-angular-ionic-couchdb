@@ -9,6 +9,7 @@ import {
   Subscription,
   take,
 } from 'rxjs';
+import { TableDoc } from 'src/app/model/table';
 import { DbService } from '../db/db.service';
 
 @Injectable({
@@ -25,7 +26,7 @@ export class TableService {
   initChangeHandler() {
     let sub: Subscription = this.dbService
       .getCurrentTableChanges()
-      .subscribe((changeDoc) => {
+      .subscribe((changeDoc: TableDoc) => {
         if (changeDoc) {
           console.warn('handleChange called');
           this.dbService.handleChange(this.tablesSubject, changeDoc, () => {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 import { BehaviorSubject, Subject } from 'rxjs';
+import { TableDoc } from 'src/app/model/table';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ export class DbService {
   db: any;
   remote: any;
 
-  _tablesSubject = new Subject();
+  _tablesSubject = new Subject<TableDoc>();
 
   constructor() {
     PouchDB.plugin(PouchDBFind);
@@ -42,15 +43,15 @@ export class DbService {
     return this._tablesSubject.asObservable();
   }
 
-  handleChange(
-    subject: BehaviorSubject<any>,
+  handleChange<T extends { _id?: string }>(
+    subject: BehaviorSubject<Array<T>>,
     changedDoc: any,
     updateManually: Function
   ) {
-    let docs = subject.getValue();
+    let docs: Array<T> = subject.getValue();
     console.log(changedDoc);
     console.warn(docs);
-    var idx = docs.findIndex((x: any) => x._id === changedDoc._id);
+    var idx = docs.findIndex((x: T) => x._id === changedDoc._id);
     console.warn(idx);
 
     if (idx === -1) {

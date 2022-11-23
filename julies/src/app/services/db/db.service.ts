@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -33,12 +33,32 @@ export class DbService {
         if (change.doc.type === 'table') {
           console.warn('Change detected on table document');
           console.warn(change.doc);
-          this._tablesSubject.next(true);
+          this._tablesSubject.next(change.doc);
         }
       });
   }
 
   getCurrentTableChanges() {
     return this._tablesSubject.asObservable();
+  }
+
+  handleChange(
+    subject: BehaviorSubject<any>,
+    changedDoc: any,
+    updateManually: Function
+  ) {
+    let docs = subject.getValue();
+    console.log(changedDoc);
+    console.warn(docs);
+    var idx = docs.findIndex((x: any) => x._id === changedDoc._id);
+    console.warn(idx);
+
+    if (idx === -1) {
+      updateManually();
+      return;
+    }
+    docs[idx] = changedDoc;
+    console.warn(docs);
+    subject.next(docs);
   }
 }

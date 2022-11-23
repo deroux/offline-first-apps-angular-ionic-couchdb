@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
+  BehaviorSubject,
   catchError,
   from,
   map,
   Observable,
   of,
-  Subject,
   Subscription,
   take,
 } from 'rxjs';
@@ -15,7 +15,7 @@ import { DbService } from '../db/db.service';
   providedIn: 'root',
 })
 export class TableService {
-  tablesSubject = new Subject();
+  tablesSubject = new BehaviorSubject([]);
   subscriptions: Array<Subscription> = [];
 
   constructor(private dbService: DbService) {
@@ -25,10 +25,12 @@ export class TableService {
   initChangeHandler() {
     let sub: Subscription = this.dbService
       .getCurrentTableChanges()
-      .subscribe((changed) => {
-        if (changed) {
+      .subscribe((changeDoc) => {
+        if (changeDoc) {
           console.warn('handleChange called');
-          this.handleChange();
+          this.dbService.handleChange(this.tablesSubject, changeDoc, () => {
+            this.fetchTables();
+          });
         }
       });
     this.subscriptions.push(sub);
@@ -38,11 +40,8 @@ export class TableService {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  handleChange() {
-    this.fetchTables();
-  }
-
   fetchTables() {
+    console.error('fetchTables called');
     let query = {
       selector: {
         type: 'table',

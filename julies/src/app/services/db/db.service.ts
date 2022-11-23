@@ -43,12 +43,12 @@ export class DbService {
     return this._tablesSubject.asObservable();
   }
 
-  handleChange<T extends { _id?: string }>(
+  handleChange<T extends TableDoc>(
     subject: BehaviorSubject<Array<T>>,
     changedDoc: any,
     updateManually: Function
   ) {
-    let docs: Array<T> = subject.getValue();
+    let docs = subject.getValue();
     console.log(changedDoc);
     console.warn(docs);
     var idx = docs.findIndex((x: T) => x._id === changedDoc._id);

@@ -16,7 +16,9 @@ import { DbService } from '../db/db.service';
   providedIn: 'root',
 })
 export class TableService {
-  tablesSubject = new BehaviorSubject([]);
+  tablesSubject: BehaviorSubject<Array<TableDoc>> = new BehaviorSubject(
+    new Array<TableDoc>()
+  );
   subscriptions: Array<Subscription> = [];
 
   constructor(private dbService: DbService) {

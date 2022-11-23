@@ -43,7 +43,7 @@ export class DbService {
     return this._tablesSubject.asObservable();
   }
 
-  handleChange<T extends TableDoc>(
+  handleChange<T extends { _id?: string }>(
     subject: BehaviorSubject<Array<T>>,
     changedDoc: any,
     updateManually: Function

@@ -14,7 +14,10 @@
         size-md="2"
         size-lg="1"
       >
-        <ion-card class="ion-no-padding">
+        <ion-card
+          class="ion-no-padding"
+          routerLink="/tabs/tables/table-details/{{obj.table.id}}"
+        >
           <ion-card-title class="ion-text-center"
             >{{ obj.table.id }}</ion-card-title
           >

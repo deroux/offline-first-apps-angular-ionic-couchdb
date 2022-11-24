@@ -19,13 +19,16 @@ export class ProductsConsumedService {
   prodConsumedSubject: BehaviorSubject<Array<ProductsConsumedDoc>> =
     new BehaviorSubject(new Array<ProductsConsumedDoc>());
   subscriptions: Array<Subscription> = [];
+  tableIdSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   constructor(private dbService: DbService) {
-    this.fetchProductsConsumed();
-    this.initChangeHandler();
+    let s = this.tableIdSubject.subscribe((tableId) => {
+      this.fetchProductsConsumed(tableId);
+      this.initChangeHandler(tableId);
+    });
   }
 
-  initChangeHandler() {
+  initChangeHandler(tableId: string) {
     let sub: Subscription = this.dbService
       .getCurrentConsumedProductChanges()
       .subscribe((changeDoc: ProductsConsumedDoc) => {
@@ -35,7 +38,7 @@ export class ProductsConsumedService {
             this.prodConsumedSubject,
             changeDoc,
             () => {
-              this.fetchProductsConsumed();
+              this.fetchProductsConsumed(tableId);
             }
           );
         }
@@ -47,11 +50,17 @@ export class ProductsConsumedService {
     this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  fetchProductsConsumed() {
+  setTableId(tableId: string) {
+    if (tableId === undefined || tableId === null || tableId == '') return;
+    this.tableIdSubject.next(tableId);
+  }
+
+  fetchProductsConsumed(tableId: string) {
     console.error('fetchProductsConsumed called');
     let query = {
       selector: {
         type: 'products-consumed',
+        table: `${tableId}`,
       },
       fields: ['_id', '_rev', 'table', 'type', 'products'],
       execution_stats: true,

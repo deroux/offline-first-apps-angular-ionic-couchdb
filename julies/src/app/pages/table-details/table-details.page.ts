@@ -30,11 +30,12 @@ export class TableDetailsPage implements OnInit {
 
   ionViewWillEnter() {
     this.tableId = this.activatedRoute.snapshot.paramMap.get('id') as string;
+    this.prodConsumedService.setTableId(this.tableId);
 
     this.productService.fetchProducts();
-    this.initSubscriptions();
+    this.prodConsumedService.fetchProductsConsumed(this.tableId);
 
-    this.prodConsumedService.fetchProductsConsumed();
+    this.initSubscriptions();
   }
 
   initSubscriptions() {

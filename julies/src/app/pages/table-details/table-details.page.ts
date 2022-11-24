@@ -15,8 +15,10 @@ export class TableDetailsPage implements OnInit {
   tableId: string = '';
   prodConsumed: ProductsConsumedDoc = new ProductsConsumedDoc();
   visibleProducts: Array<Product> = [];
+  products: Array<Product> = [];
 
   subscriptions: Array<Subscription> = [];
+  productCategories: Array<String> = [];
 
   constructor(
     private prodConsumedService: ProductsConsumedService,
@@ -50,7 +52,27 @@ export class TableDetailsPage implements OnInit {
       .getAllProducts()
       .subscribe((productsDoc: Array<ProductsDoc>) => {
         let products = productsDoc[0];
+        this.products = products.products;
         this.visibleProducts = products.products;
+
+        console.warn(this.products);
+
+        this.productCategories = [
+          'All',
+          ...new Set(this.products.map((o) => o.category)),
+        ] as String[];
       });
+
+    this.subscriptions.push(p, p2);
+  }
+
+  filterVisibleProducts(category: String) {
+    console.warn(`Category: ${category}`);
+    console.warn(this.visibleProducts);
+    console.warn(this.products);
+    this.visibleProducts = this.products;
+    this.visibleProducts = this.visibleProducts.filter((p) => {
+      return category === 'All' ? true : p.category === category;
+    });
   }
 }

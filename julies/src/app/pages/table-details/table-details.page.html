@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list class="split-screen-horizontal">
     <ion-item
       *ngIf="prodConsumed === undefined || prodConsumed?.products === []"
     >
@@ -34,14 +34,42 @@
       </ion-grid>
     </ion-item>
   </ion-list>
-  <ion-grid>
-    <ion-row>
+  <ion-grid class="split-screen-horizontal">
+    <ion-row class="ion-no-padding">
       <ion-col size="9">
-        <ion-row>
-          <ion-col *ngFor="let p of visibleProducts">
-            <ion-label>
-              <h4>{{ p.product }}</h4>
-            </ion-label>
+        <ion-row class="ion-no-padding">
+          <ion-col
+            size="3"
+            size-md="2"
+            size-lg="1"
+            class="ion-no-padding ion-no-margin ion-justify-content-center"
+            *ngFor="let p of visibleProducts"
+          >
+            <ion-card class="ion-justify-content-center ion-align-items-center">
+              <ion-label class="ion-text-center">
+                <p>{{ p.product }}</p>
+              </ion-label>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+      <ion-col size="3">
+        <ion-row class="ion-no-padding">
+          <ion-col
+            size="12"
+            size-md="6"
+            size-lg="4"
+            class="ion-no-padding ion-no-margin ion-justify-content-center"
+            *ngFor="let category of productCategories"
+          >
+            <ion-card
+              class="ion-justify-content-center ion-align-items-center"
+              (click)="filterVisibleProducts(category)"
+            >
+              <ion-label class="ion-text-center">
+                <p>{{ category }}</p>
+              </ion-label>
+            </ion-card>
           </ion-col>
         </ion-row>
       </ion-col>

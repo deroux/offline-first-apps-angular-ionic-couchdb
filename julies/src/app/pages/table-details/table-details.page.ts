@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Product, ProductsDoc } from 'src/app/model/products';
 import { ProductsConsumedDoc } from 'src/app/model/productsConsumed';
 import { ProductsConsumedService } from 'src/app/services/products-consumed/products-consumed.service';
+import { ProductsService } from 'src/app/services/products/products.service';
 
 @Component({
   selector: 'app-table-details',
@@ -11,24 +14,42 @@ import { ProductsConsumedService } from 'src/app/services/products-consumed/prod
 export class TableDetailsPage implements OnInit {
   tableId: string = '';
   prodConsumed: ProductsConsumedDoc = new ProductsConsumedDoc();
+  visibleProducts: Array<Product> = [];
+
+  subscriptions: Array<Subscription> = [];
 
   constructor(
     private prodConsumedService: ProductsConsumedService,
+    private productService: ProductsService,
     private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit() {}
 
-  ngAfterViewInit() {
-    this.prodConsumedService
+  ngAfterViewInit() {}
+
+  ionViewWillEnter() {
+    this.tableId = this.activatedRoute.snapshot.paramMap.get('id') as string;
+
+    this.productService.fetchProducts();
+    this.initSubscriptions();
+
+    this.prodConsumedService.fetchProductsConsumed();
+  }
+
+  initSubscriptions() {
+    let p = this.prodConsumedService
       .getProductsConsumed()
       .subscribe((prodConsumed: Array<ProductsConsumedDoc>) => {
         this.prodConsumed = prodConsumed[0];
       });
-    this.prodConsumedService.fetchProductsConsumed();
-  }
+    this.subscriptions.push(p);
 
-  ionViewWillEnter() {
-    this.tableId = this.activatedRoute.snapshot.paramMap.get('id') as string;
+    let p2 = this.productService
+      .getAllProducts()
+      .subscribe((productsDoc: Array<ProductsDoc>) => {
+        let products = productsDoc[0];
+        this.visibleProducts = products.products;
+      });
   }
 }

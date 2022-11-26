@@ -39,8 +39,8 @@ export class TableDetailsPage implements OnInit {
     this.tableId = this.activatedRoute.snapshot.paramMap.get('id') as string;
     this.prodConsumedService.setTableId(this.tableId);
 
-    this.productService.fetchProducts();
-    this.prodConsumedService.fetchProductsConsumed(this.tableId);
+    // this.productService.fetchProducts();
+    // this.prodConsumedService.fetchProductsConsumed(this.tableId);
 
     this.initSubscriptions();
   }

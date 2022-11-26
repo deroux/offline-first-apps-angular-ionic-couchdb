@@ -23,6 +23,8 @@ export class TableDetailsPage implements OnInit {
   subscriptions: Array<Subscription> = [];
   productCategories: Array<String> = [];
 
+  editted: boolean = false;
+
   constructor(
     private prodConsumedService: ProductsConsumedService,
     private productService: ProductsService,
@@ -54,11 +56,15 @@ export class TableDetailsPage implements OnInit {
     let p2 = this.productService
       .getAllProducts()
       .subscribe((productsDoc: Array<ProductsDoc>) => {
+        if (
+          productsDoc === undefined ||
+          productsDoc.length <= 0 ||
+          productsDoc[0]?.products == undefined
+        )
+          return;
         let products = productsDoc[0];
-        this.products = products.products;
+        this.products = products?.products;
         this.visibleProducts = products.products;
-
-        console.warn(this.products);
 
         this.productCategories = [
           'All',
@@ -80,6 +86,7 @@ export class TableDetailsPage implements OnInit {
   }
 
   addProductToConsumed(product: Product) {
+    this.editted = true;
     // TODO: check stock > 0 and disable product button
     delete product['stock'];
 
@@ -103,5 +110,16 @@ export class TableDetailsPage implements OnInit {
       consumedProduct.amount = 1;
       this.prodConsumed.products.push(consumedProduct);
     }
+  }
+
+  toggleEdit() {
+    this.editted = !this.editted;
+  }
+
+  saveEdit() {
+    if (this.prodConsumed === undefined) return;
+    // update in pouchdb
+    this.prodConsumedService.updateProductsConsumed(this.prodConsumed);
+    this.editted = false;
   }
 }

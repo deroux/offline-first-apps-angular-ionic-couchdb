@@ -80,4 +80,10 @@ export class ProductsConsumedService {
   getProductsConsumed() {
     return this.prodConsumedSubject.asObservable();
   }
+
+  updateProductsConsumed(doc: ProductsConsumedDoc) {
+    this.dbService.db.put(doc).catch((err: any) => {
+      console.error(err);
+    });
+  }
 }

@@ -45,7 +45,10 @@
             class="ion-no-padding ion-no-margin ion-justify-content-center"
             *ngFor="let p of visibleProducts"
           >
-            <ion-card class="ion-justify-content-center ion-align-items-center">
+            <ion-card
+              class="ion-justify-content-center ion-align-items-center"
+              (click)="addProductToConsumed(p)"
+            >
               <ion-label class="ion-text-center">
                 <p>{{ p.product }}</p>
               </ion-label>

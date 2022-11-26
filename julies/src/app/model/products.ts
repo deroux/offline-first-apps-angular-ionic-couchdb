@@ -9,5 +9,5 @@ export class Product {
   product: string = '';
   category: string = '';
   ppp: number = 0.0;
-  stock: string = '';
+  stock?: string = '';
 }

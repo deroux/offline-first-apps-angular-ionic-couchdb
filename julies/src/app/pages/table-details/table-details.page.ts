@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Product, ProductsDoc } from 'src/app/model/products';
-import { ProductsConsumedDoc } from 'src/app/model/productsConsumed';
+import {
+  ConsumedProduct,
+  ProductsConsumedDoc,
+} from 'src/app/model/productsConsumed';
 import { ProductsConsumedService } from 'src/app/services/products-consumed/products-consumed.service';
 import { ProductsService } from 'src/app/services/products/products.service';
 
@@ -74,5 +77,31 @@ export class TableDetailsPage implements OnInit {
     this.visibleProducts = this.visibleProducts.filter((p) => {
       return category === 'All' ? true : p.category === category;
     });
+  }
+
+  addProductToConsumed(product: Product) {
+    // TODO: check stock > 0 and disable product button
+    delete product['stock'];
+
+    let found = this.prodConsumed.products.some((p) => {
+      return p.product === product.product;
+    });
+    console.warn(found);
+    if (found) {
+      // increase by 1
+      this.prodConsumed.products.forEach((p) => {
+        if (product.product === p.product) {
+          p.amount += 1;
+        }
+      });
+    } else {
+      // add new product to products consumed
+      let consumedProduct = new ConsumedProduct();
+      consumedProduct.product = product.product;
+      consumedProduct.category = product.category;
+      consumedProduct.ppp = product.ppp;
+      consumedProduct.amount = 1;
+      this.prodConsumed.products.push(consumedProduct);
+    }
   }
 }

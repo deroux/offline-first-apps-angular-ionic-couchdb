@@ -4,8 +4,82 @@
       <ion-back-button defaultHref="/tabs/tables/table-details/{{tableId}}">
       </ion-back-button>
     </ion-buttons>
-    <ion-title>Table {{tableId}}</ion-title>
+    <ion-title>Pay ({{tableId}})</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="selectAll()">
+        {{ getTotalOutstanding() | currency }} open
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content> </ion-content>
+<ion-content>
+  <ion-list>
+    <ion-item
+      *ngIf="prodConsumed === undefined || prodConsumed?.products === []"
+    >
+      <ion-label>
+        <h4>No products consumed until now.</h4>
+      </ion-label>
+    </ion-item>
+    <ion-item
+      *ngFor="let prod of prodConsumed?.products"
+      (click)="consumedToSelected(prod)"
+    >
+      <ion-grid>
+        <ion-row>
+          <ion-col size="2">
+            <ion-label>
+              <h4>{{prod.amount}}x</h4>
+            </ion-label>
+          </ion-col>
+          <ion-col size="8">
+            <ion-label>
+              <h4>{{prod.product}}</h4>
+              <p>{{prod.ppp | currency}}</p>
+            </ion-label>
+          </ion-col>
+          <ion-col size="2">
+            <ion-label>
+              <h4>{{prod.amount * prod.ppp | currency}}</h4>
+            </ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <ion-item *ngIf="selected === undefined || selected.length === 0">
+    <ion-label>
+      <h4>No products selected.</h4>
+    </ion-label>
+  </ion-item>
+  <ion-chip *ngFor="let prod of selected" (click)="selectedToConsumed(prod)">
+    <ion-label>{{prod.amount}}x {{prod.product}}</ion-label>
+    <ion-icon name="close-circle"></ion-icon>
+  </ion-chip>
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)="unselectAll()">
+      <ion-button>Clear selected</ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="selectNumberOfPersons()">Split payment</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-item *ngIf="splitPersons !== 0">
+    <ion-label class="ion-text-center">
+      <h4>
+        <b>{{getSplitAmount() | currency}} per person ({{ splitPersons }}x)</b>
+      </h4>
+    </ion-label>
+  </ion-item>
+  <ion-button
+    expand="block"
+    color="success"
+    *ngIf="selected.length > 0"
+    (click)="checkPaidSelected(getTotalSelected())"
+  >
+    Paid {{ getTotalSelected() | currency }}
+  </ion-button>
+</ion-footer>

@@ -1,17 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  from,
-  map,
-  Observable,
-  of,
-  Subscription,
-  take,
-} from 'rxjs';
+import { BehaviorSubject, catchError, of, Subscription, take } from 'rxjs';
+import { DBRepository } from 'src/app/db/DB.repository';
 import { ProductsConsumedDoc } from 'src/app/model/productsConsumed';
 import { v4 as uuidv4 } from 'uuid';
-import { DbService } from '../db/db.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +13,7 @@ export class ProductsConsumedService {
   subscriptions: Array<Subscription> = [];
   tableIdSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private dbService: DbService) {
+  constructor(private dbService: DBRepository<any>) {
     let s = this.tableIdSubject.subscribe((tableId) => {
       this.fetchProductsConsumed(tableId);
       this.initChangeHandler(tableId);
@@ -31,13 +22,14 @@ export class ProductsConsumedService {
 
   initChangeHandler(tableId: string) {
     let sub: Subscription = this.dbService
-      .getCurrentConsumedProductChanges()
-      .subscribe((changeDoc: ProductsConsumedDoc) => {
-        if (changeDoc) {
+      .getDocumentChanges$()
+      .subscribe((doc: any) => {
+        if (doc.type !== 'products-consumed') return;
+        if (doc) {
           console.warn('handleChange called');
-          this.dbService.handleChange(
+          this.dbService.handleDocumentChange(
             this.prodConsumedSubject,
-            changeDoc,
+            doc,
             () => {
               this.fetchProductsConsumed(tableId);
             }
@@ -60,17 +52,10 @@ export class ProductsConsumedService {
     if (tableId === undefined || tableId == '') return;
 
     console.error('fetchProductsConsumed called');
-    let query = {
-      selector: {
-        type: 'products-consumed',
-        table: `${tableId}`,
-      },
-      fields: ['_id', '_rev', 'table', 'type', 'products'],
-      execution_stats: true,
-      limit: 1,
-    };
-    let q: Observable<any> = from(this.dbService.db.find(query)).pipe(
-      map((obj: any) => obj['docs'])
+    let q = this.dbService.fetchByTypeAndTableID(
+      'products-consumed',
+      tableId.toString(),
+      ['_id', '_rev', 'table', 'type', 'products']
     );
     q.pipe(
       take(1),
@@ -98,7 +83,7 @@ export class ProductsConsumedService {
   }
 
   updateProductsConsumed(doc: ProductsConsumedDoc) {
-    this.dbService.db.put(doc).catch((err: any) => {
+    this.dbService.createOrUpdate(doc).catch((err: any) => {
       console.error(err);
     });
   }

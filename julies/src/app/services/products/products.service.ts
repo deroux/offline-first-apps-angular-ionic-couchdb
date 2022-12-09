@@ -1,16 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  from,
-  map,
-  Observable,
-  of,
-  Subscription,
-  take,
-} from 'rxjs';
+import { BehaviorSubject, catchError, of, Subscription, take } from 'rxjs';
+import { DBRepository } from 'src/app/db/DB.repository';
 import { ProductsDoc } from 'src/app/model/products';
-import { DbService } from '../db/db.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,18 +12,19 @@ export class ProductsService {
   );
   subscriptions: Array<Subscription> = [];
 
-  constructor(private dbService: DbService) {
+  constructor(private dbService: DBRepository<any>) {
     this.fetchProducts();
     this.initChangeHandler();
   }
 
   initChangeHandler() {
     let sub: Subscription = this.dbService
-      .getAllProductChanges()
-      .subscribe((changeDoc: ProductsDoc) => {
-        if (changeDoc) {
+      .getDocumentChanges$()
+      .subscribe((doc: any) => {
+        if (doc.type !== 'products') return;
+        if (doc) {
           console.warn('handleChange called');
-          this.dbService.handleChange(this.prodSubject, changeDoc, () => {
+          this.dbService.handleDocumentChange(this.prodSubject, doc, () => {
             this.fetchProducts();
           });
         }
@@ -46,17 +38,12 @@ export class ProductsService {
 
   fetchProducts() {
     console.error('fetchProducts called');
-    let query = {
-      selector: {
-        type: 'products',
-      },
-      fields: ['_id', '_rev', 'type', 'products'],
-      execution_stats: true,
-      limit: 1,
-    };
-    let q: Observable<any> = from(this.dbService.db.find(query)).pipe(
-      map((obj: any) => obj['docs'])
-    );
+    let q = this.dbService.fetchByType('products', [
+      '_id',
+      '_rev',
+      'type',
+      'products',
+    ]);
     q.pipe(
       take(1),
       catchError((_) => of([]))

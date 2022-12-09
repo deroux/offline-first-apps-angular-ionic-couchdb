@@ -1,16 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  catchError,
-  from,
-  map,
-  Observable,
-  of,
-  Subscription,
-  take,
-} from 'rxjs';
+import { BehaviorSubject, catchError, of, Subscription, take } from 'rxjs';
+import { DBRepository } from 'src/app/db/DB.repository';
 import { TableDoc } from 'src/app/model/table';
-import { DbService } from '../db/db.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,20 +12,19 @@ export class TableService {
   );
   subscriptions: Array<Subscription> = [];
 
-  constructor(private dbService: DbService) {
+  constructor(private dbService: DBRepository<any>) {
     this.initChangeHandler();
   }
 
   initChangeHandler() {
     let sub: Subscription = this.dbService
-      .getCurrentTableChanges()
-      .subscribe((changeDoc: TableDoc) => {
-        if (changeDoc) {
-          console.warn('handleChange called');
-          this.dbService.handleChange(this.tablesSubject, changeDoc, () => {
-            this.fetchTables();
-          });
-        }
+      .getDocumentChanges$()
+      .subscribe((doc: any) => {
+        if (doc.type !== 'table') return;
+        console.warn('handleChange called');
+        this.dbService.handleDocumentChange(this.tablesSubject, doc, () => {
+          this.fetchTables();
+        });
       });
     this.subscriptions.push(sub);
   }
@@ -45,16 +35,12 @@ export class TableService {
 
   fetchTables() {
     console.error('fetchTables called');
-    let query = {
-      selector: {
-        type: 'table',
-      },
-      fields: ['_id', '_rev', 'table', 'type'],
-      execution_stats: true,
-    };
-    let q: Observable<any> = from(this.dbService.db.find(query)).pipe(
-      map((obj: any) => obj['docs'])
-    );
+    let q = this.dbService.fetchByType('table', [
+      '_id',
+      '_rev',
+      'table',
+      'type',
+    ]);
     q.pipe(
       take(1),
       catchError((_) => of([]))

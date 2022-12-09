@@ -5,8 +5,11 @@
       <ion-back-button defaultHref="/tabs/tables"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button (click)="saveEdit()" [disabled]="!editted">
+      <ion-button (click)="saveEdit()" *ngIf="editted">
         <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-button (click)="toggleEdit()" *ngIf="!editted">
+        <ion-icon name="create-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -37,6 +40,22 @@
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-buttons slot="end">
+        <ion-button [disabled]="!editted" (click)="onDecreaseAmount(prod)"
+          ><ion-icon
+            slot="icon-only"
+            name="remove-outline"
+            color="danger"
+          ></ion-icon
+        ></ion-button>
+        <ion-button [disabled]="!editted" (click)="onIncreaseAmount(prod)"
+          ><ion-icon
+            slot="icon-only"
+            name="add-outline"
+            color="primary"
+          ></ion-icon
+        ></ion-button>
+      </ion-buttons>
     </ion-item>
   </ion-list>
   <ion-grid class="split-screen-horizontal">
@@ -53,6 +72,7 @@
             <ion-card
               class="ion-justify-content-center ion-align-items-center"
               (click)="addProductToConsumed(p)"
+              [disabled]="!editted"
             >
               <ion-label class="ion-text-center">
                 <p>{{ p.product }}</p>

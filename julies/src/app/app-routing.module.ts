@@ -12,6 +12,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./pages/tables/tables.module').then((m) => m.TablesPageModule),
   },
+  {
+    path: 'pay',
+    loadChildren: () => import('./pages/pay/pay.module').then( m => m.PayPageModule)
+  },
 ];
 @NgModule({
   imports: [

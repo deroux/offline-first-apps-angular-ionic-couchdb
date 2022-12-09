@@ -67,7 +67,7 @@
             size-md="2"
             size-lg="1"
             class="ion-no-padding ion-no-margin ion-justify-content-center"
-            *ngFor="let p of visibleProducts"
+            *ngFor="let p of visibleProducts | orderBy: 'product'"
           >
             <ion-card
               class="ion-justify-content-center ion-align-items-center"

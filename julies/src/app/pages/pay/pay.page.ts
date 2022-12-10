@@ -38,7 +38,6 @@ export class PayPage implements OnInit {
     this.tableId = this.activatedRoute.snapshot.paramMap.get('id') as string;
     this.prodConsumedService.setTableId(this.tableId);
     this.billService.setTableId(this.tableId);
-
     this.initSubscriptions();
   }
 
@@ -57,15 +56,6 @@ export class PayPage implements OnInit {
         this.prodConsumed = prodConsumed[0];
       });
     this.subscriptions.push(p);
-
-    let b = this.billService
-      .getCurrentBill()
-      .subscribe((billDoc: Array<BillDoc>) => {
-        if (billDoc === undefined || billDoc.length === 0) return;
-        this.billDoc = billDoc[0];
-        this.paid = this.billDoc?.paid;
-      });
-    this.subscriptions.push(b);
   }
 
   consumedToSelected(product: any) {
@@ -156,16 +146,18 @@ export class PayPage implements OnInit {
   }
 
   paidSelected() {
-    // if billdoc available then => merge object arrays from selected to paid
-    this.billDoc.paid = this.mergeArrayAmounts(
-      this.selected,
-      this.billDoc.paid
-    );
-    console.warn(this.prodConsumed);
-    console.warn(this.billDoc);
+    if (
+      this.selected === undefined ||
+      this.selected === null ||
+      this.selected.length === 0
+    ) {
+      console.warn('No selected products, returning from payment');
+      return;
+    }
+
     // update bill document
     this.billService
-      .updateBill(this.billDoc)
+      .createBill(this.selected)
       .then(() => {
         this.prodConsumedService.updateProductsConsumed(this.prodConsumed);
         // cleanup

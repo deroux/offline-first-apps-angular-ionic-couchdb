@@ -15,6 +15,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'kitchen',
+        loadChildren: () =>
+          import('../pages/kitchen/kitchen.module').then(
+            (m) => m.KitchenPageModule
+          ),
+      },
+      {
         path: '',
         redirectTo: '/tabs/tables',
         pathMatch: 'full',

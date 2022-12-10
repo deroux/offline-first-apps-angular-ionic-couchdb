@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Kitchen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item
+    *ngIf="prodConsumedDocs === undefined || prodConsumedDocs.length <= 0"
+  >
+    <ion-label>
+      <h4>No products consumed until now.</h4>
+    </ion-label>
+  </ion-item>
+  <ion-list *ngFor="let doc of prodConsumedDocs">
+    <ion-col *ngIf="doc?.products !== undefined && doc?.products?.length > 0">
+      <ion-list-header>
+        <ion-label>Table {{ doc.table}} </ion-label>
+      </ion-list-header>
+      <ion-item *ngFor="let prod of doc?.products">
+        <ion-grid>
+          <ion-row>
+            <ion-col size-lg="1" size-sm="3">
+              <ion-label>
+                <h4><b>{{ prod.amount }}x</b></h4>
+              </ion-label>
+            </ion-col>
+            <ion-col size-sm="9">
+              <ion-label>
+                <h4>{{ prod.product }}</h4>
+              </ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-col>
+  </ion-list>
+</ion-content>

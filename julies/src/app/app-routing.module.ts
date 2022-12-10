@@ -16,6 +16,10 @@ const routes: Routes = [
     path: 'pay',
     loadChildren: () => import('./pages/pay/pay.module').then( m => m.PayPageModule)
   },
+  {
+    path: 'kitchen',
+    loadChildren: () => import('./pages/kitchen/kitchen.module').then( m => m.KitchenPageModule)
+  },
 ];
 @NgModule({
   imports: [

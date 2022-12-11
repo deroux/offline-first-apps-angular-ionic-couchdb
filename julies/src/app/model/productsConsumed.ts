@@ -11,4 +11,6 @@ export class ConsumedProduct {
   category: string = '';
   amount: number = 0;
   ppp: number = 0.0;
+  prepared: number = 0;
+  delivered: number = 0;
 }

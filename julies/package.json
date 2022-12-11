@@ -30,6 +30,7 @@
     "pouchdb-find": "^7.3.1",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "xstate": "^4.35.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

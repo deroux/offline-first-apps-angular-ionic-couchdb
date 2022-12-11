@@ -10,5 +10,7 @@ export class ConsumedProduct {
   product: string = '';
   category: string = '';
   amount: number = 0;
+  prepared: number = 0;
+  delivered: number = 0;
   ppp: number = 0.0;
 }

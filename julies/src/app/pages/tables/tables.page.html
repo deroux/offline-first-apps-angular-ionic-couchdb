@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Julies</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="transition()">Transition</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -17,11 +20,19 @@
         <ion-card
           class="ion-no-padding"
           routerLink="/tabs/tables/table-details/{{obj.table.id}}"
+          [color]="getColor(obj.table.state)"
         >
-          <ion-card-title class="ion-text-center"
-            >{{ obj.table.id }}</ion-card-title
-          >
-          <ion-card-subtitle>{{ obj.table.state }}</ion-card-subtitle>
+          <ion-card-header class="ion-text-center">
+            <ion-card-title class="ion-text-center"
+              >{{ obj.table.id }}</ion-card-title
+            >
+            <ion-label *ngIf="obj.table.state !== 'free'">
+              <ion-icon
+                slot="icon-only"
+                [name]="getIcon(obj.table.state)"
+              ></ion-icon>
+            </ion-label>
+          </ion-card-header>
         </ion-card>
       </ion-col>
     </ion-row>

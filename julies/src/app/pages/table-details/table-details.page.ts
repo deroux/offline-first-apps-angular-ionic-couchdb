@@ -112,6 +112,12 @@ export class TableDetailsPage implements OnInit {
     }
   }
 
+  preparedToDelivered(doc: ProductsConsumedDoc, product: ConsumedProduct) {
+    if (product.delivered >= product.amount || product.prepared <= 0) return;
+    product.prepared -= 1;
+    product.delivered += 1;
+  }
+
   toggleEdit() {
     this.editted = !this.editted;
   }

@@ -51,7 +51,10 @@
               <ion-label>{{ prod.prepared }}</ion-label>
               <ion-icon name="fast-food"></ion-icon>
             </ion-chip>
-            <ion-chip>
+            <ion-chip
+              [color]="editted && prod.prepared > 0 ? 'primary' : ''"
+              (click)="preparedToDelivered(prodConsumed, prod)"
+            >
               <ion-label>{{ prod.delivered }}</ion-label>
               <ion-icon name="footsteps"></ion-icon>
             </ion-chip>

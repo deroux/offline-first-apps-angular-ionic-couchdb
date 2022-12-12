@@ -39,6 +39,24 @@
             </ion-label>
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-chip>
+              <ion-label
+                >{{ prod.amount - prod.delivered - prod.prepared }}</ion-label
+              >
+              <ion-icon name="receipt"></ion-icon>
+            </ion-chip>
+            <ion-chip>
+              <ion-label>{{ prod.prepared }}</ion-label>
+              <ion-icon name="fast-food"></ion-icon>
+            </ion-chip>
+            <ion-chip>
+              <ion-label>{{ prod.delivered }}</ion-label>
+              <ion-icon name="footsteps"></ion-icon>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
       </ion-grid>
       <ion-buttons slot="end">
         <ion-button [disabled]="!editted" (click)="onDecreaseAmount(prod)"

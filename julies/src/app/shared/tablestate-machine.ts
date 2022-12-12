@@ -70,6 +70,12 @@ export const tableMachine = createMachine(
               actions: ['log'],
             },
           ],
+          prepared: [
+            {
+              target: 'prepared',
+              actions: ['log'],
+            },
+          ],
           paid: [
             {
               target: 'paid',

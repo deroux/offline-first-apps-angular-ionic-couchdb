@@ -46,6 +46,26 @@ export class KitchenPage implements OnInit {
     this.changed(doc);
   }
 
+  preparedToOrdered(doc: ProductsConsumedDoc, product: ConsumedProduct) {
+    if (product.prepared <= 0) return;
+    product.prepared -= 1;
+    this.changed(doc);
+  }
+
+  deliveredToPrepared(doc: ProductsConsumedDoc, product: ConsumedProduct) {
+    if (product.prepared >= product.amount || product.delivered <= 0) return;
+    product.prepared += 1;
+    product.delivered -= 1;
+    this.changed(doc);
+  }
+
+  preparedToDelivered(doc: ProductsConsumedDoc, product: ConsumedProduct) {
+    if (product.delivered >= product.amount || product.prepared <= 0) return;
+    product.prepared -= 1;
+    product.delivered += 1;
+    this.changed(doc);
+  }
+
   changed(doc: ProductsConsumedDoc) {
     if (this.changedDocs.filter((o) => o.table === doc.table).length > 0)
       return;

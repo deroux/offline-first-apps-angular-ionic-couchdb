@@ -25,7 +25,9 @@
     </ion-label>
   </ion-item>
   <ion-list *ngFor="let doc of prodConsumedDocs">
-    <ion-col *ngIf="doc !== undefined && doc?.products !== undefined">
+    <ion-col
+      *ngIf="doc !== undefined && doc?.products !== undefined && doc.products.length"
+    >
       <ion-list-header>
         <ion-label>Table {{ doc.table}} </ion-label>
       </ion-list-header>
@@ -66,16 +68,16 @@
           <ion-button disabled>
             <ion-icon name="receipt"></ion-icon>
           </ion-button>
-          <ion-button color="danger">
+          <ion-button color="danger" (click)="preparedToOrdered(doc, prod)">
             <ion-icon name="backspace-outline"></ion-icon>
           </ion-button>
           <ion-button (click)="orderedToPrepared(doc, prod)">
             <ion-icon name="fast-food"></ion-icon>
           </ion-button>
-          <ion-button color="danger">
+          <ion-button color="danger" (click)="deliveredToPrepared(doc, prod)">
             <ion-icon name="backspace-outline"></ion-icon>
           </ion-button>
-          <ion-button>
+          <ion-button (click)="preparedToDelivered(doc, prod)">
             <ion-icon name="footsteps"></ion-icon>
           </ion-button>
         </ion-buttons>

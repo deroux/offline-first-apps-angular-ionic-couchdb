@@ -31,7 +31,7 @@
       <ion-list-header>
         <ion-label>Table {{ doc.table}} </ion-label>
       </ion-list-header>
-      <ion-item *ngFor="let prod of doc?.products">
+      <ion-item *ngFor="let prod of sortByDelivered(doc.products)">
         <ion-grid>
           <ion-row>
             <ion-col size-lg="1" size-sm="3">

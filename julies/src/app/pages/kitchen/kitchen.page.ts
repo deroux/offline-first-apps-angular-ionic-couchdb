@@ -101,4 +101,16 @@ export class KitchenPage implements OnInit {
   toggleEdit() {
     this.edit = !this.edit;
   }
+
+  sortByDelivered(products: Array<ConsumedProduct>) {
+    if (products === undefined) return [];
+    return products.sort((a: ConsumedProduct, b: ConsumedProduct) => {
+      if (a.amount - a.delivered === 0) {
+        return 1;
+      } else if (b.amount - b.delivered === 0) {
+        return -1;
+      }
+      return 0;
+    });
+  }
 }

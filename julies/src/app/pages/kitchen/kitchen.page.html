@@ -26,7 +26,7 @@
   </ion-item>
   <ion-list *ngFor="let doc of prodConsumedDocs">
     <ion-col
-      *ngIf="doc !== undefined && doc?.products !== undefined && doc.products.length"
+      *ngIf="doc !== undefined && doc?.products !== undefined && doc.products.length > 0"
     >
       <ion-list-header>
         <ion-label>Table {{ doc.table}} </ion-label>

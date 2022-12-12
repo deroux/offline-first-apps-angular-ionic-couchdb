@@ -27,7 +27,7 @@ export class KitchenPage implements OnInit {
     this.subscriptions.push(
       this.prodConsumedService
         .getAllProductsConsumed()
-        .subscribe((productsConsumedArr) => {
+        .subscribe((productsConsumedArr: any) => {
           console.log(productsConsumedArr);
           this.prodConsumedDocs = productsConsumedArr;
         })

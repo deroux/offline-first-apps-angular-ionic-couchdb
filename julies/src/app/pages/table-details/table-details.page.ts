@@ -20,6 +20,8 @@ export class TableDetailsPage implements OnInit {
   visibleProducts: Array<Product> = [];
   products: Array<Product> = [];
 
+  pendingChanges: Array<ConsumedProduct> = [];
+
   subscriptions: Array<Subscription> = [];
   productCategories: Array<String> = [];
 
@@ -89,6 +91,7 @@ export class TableDetailsPage implements OnInit {
     this.editted = true;
     // TODO: check stock > 0 and disable product button
     delete product['stock'];
+    this.changed(product, 'add');
 
     let found = this.prodConsumed.products.some((p) => {
       return p.product === product.product;
@@ -112,6 +115,51 @@ export class TableDetailsPage implements OnInit {
     }
   }
 
+  wasProductChanged(productName: string) {
+    return this.pendingChanges.some((p) => p.product === productName);
+  }
+
+  getChangedAmount(productName: string) {
+    const length = this.pendingChanges.length;
+    console.log(this.pendingChanges);
+    for (var i = 0; i < length; i++) {
+      if (this.pendingChanges[i].product === productName) {
+        return this.pendingChanges[i].amount > 0
+          ? '+' + this.pendingChanges[i].amount
+          : this.pendingChanges[i].amount;
+      }
+    }
+    return 0;
+  }
+
+  changed(prod: Product, type: string) {
+    let product: ConsumedProduct = new ConsumedProduct();
+    product.product = prod.product;
+    product.category = prod.category;
+
+    let found = this.pendingChanges.some((p) => p.product === product.product);
+    if (found) {
+      this.pendingChanges.forEach((p) => {
+        if (p.product === product.product) {
+          if (type === 'remove') p.amount -= 1;
+          else if (type === 'add') p.amount += 1;
+
+          if (p.amount === 0) {
+            this.pendingChanges = this.pendingChanges.filter((p) => {
+              return p.product === product.product ? false : true;
+            });
+          }
+          console.log(this.pendingChanges);
+        }
+      });
+    } else {
+      product.amount = 0;
+      if (type === 'remove') product.amount -= 1;
+      else if (type === 'add') product.amount += 1;
+      this.pendingChanges.push(product);
+    }
+  }
+
   preparedToDelivered(doc: ProductsConsumedDoc, product: ConsumedProduct) {
     if (
       !this.editted ||
@@ -130,8 +178,13 @@ export class TableDetailsPage implements OnInit {
   saveEdit() {
     if (this.prodConsumed === undefined) return;
     // update in pouchdb
-    this.prodConsumedService.updateProductsConsumed(this.prodConsumed);
-    this.editted = false;
+    this.prodConsumedService
+      .updateProductsConsumed(this.prodConsumed)
+      .then(() => {
+        this.editted = false;
+        this.pendingChanges = [];
+      })
+      .catch((err) => console.error(err));
   }
 
   onDecreaseAmount(product: ConsumedProduct) {
@@ -143,6 +196,7 @@ export class TableDetailsPage implements OnInit {
   }
 
   add(product: ConsumedProduct, consumedArray: ProductsConsumedDoc) {
+    this.changed(product, 'add');
     // check if product is in array
     let found = consumedArray.products.some(
       (p: any) => p.product === product.product
@@ -164,6 +218,7 @@ export class TableDetailsPage implements OnInit {
   }
 
   remove(product: ConsumedProduct, consumedArray: ProductsConsumedDoc) {
+    this.changed(product, 'remove');
     if (product.amount > 1) {
       product.amount -= 1;
     } else if (product.amount == 1) {

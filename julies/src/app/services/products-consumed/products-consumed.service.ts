@@ -107,8 +107,6 @@ export class ProductsConsumedService {
   }
 
   updateProductsConsumed(doc: ProductsConsumedDoc) {
-    this.dbService.createOrUpdate(doc).catch((err: any) => {
-      console.error(err);
-    });
+    return this.dbService.createOrUpdate(doc);
   }
 }

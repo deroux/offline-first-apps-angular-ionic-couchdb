@@ -69,6 +69,8 @@ export class TableService {
       return;
     }
 
+    if (machine._state.value === event) return;
+
     let possibleNextEvents = machine.state.nextEvents;
     console.table(possibleNextEvents);
 

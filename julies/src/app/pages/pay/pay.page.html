@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="/tabs/tables/table-details/{{tableId}}">
       </ion-back-button>
     </ion-buttons>
-    <ion-title>Pay ({{tableId}})</ion-title>
+    <ion-title class="julies">Pay ({{tableId}})</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="selectAll()">
         {{ getTotalOutstanding() | currency }} open

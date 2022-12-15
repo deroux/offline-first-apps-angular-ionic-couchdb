@@ -4,22 +4,85 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button id="add-product-btn">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="add-product-btn" triggerAction="click">
+        <ng-template>
+          <ion-content class="ion-padding">
+            <ion-item>
+              <ion-label position="floating">Product</ion-label>
+              <ion-input #name></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Category</ion-label>
+              <ion-input #category></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Price</ion-label>
+              <ion-input #price></ion-input>
+            </ion-item>
+            <ion-button
+              expand="block"
+              fill="outline"
+              (click)="addProduct(name.value, category.value, price.value)"
+              >Add</ion-button
+            >
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
     <ion-col *ngFor="let p of products" class="ion-no-padding ion-no-margin">
-      <ion-item (click)="onSelect(p)">
+      <ion-item id="edit-product-btn-{{p.product}}" triggerAction="click"
+        ><ion-popover
+          trigger="edit-product-btn-{{p.product}}"
+          triggerAction="click"
+        >
+          <ng-template>
+            <ion-content class="ion-padding">
+              <ion-item>
+                <ion-label position="floating">Product</ion-label>
+                <ion-input #name value="{{p.product}}"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Category</ion-label>
+                <ion-input #category value="{{p.category}}"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Price</ion-label>
+                <ion-input #price value="{{p.ppp}}"></ion-input>
+              </ion-item>
+              <ion-button
+                expand="block"
+                fill="outline"
+                (click)="editProduct(p.product, name.value, category.value, price.value)"
+                >Edit</ion-button
+              >
+            </ion-content>
+          </ng-template>
+        </ion-popover>
         <ion-label>
           <h4>{{p.product}}</h4>
           <p>{{p.category}}</p>
         </ion-label>
+        <ion-label>
+          <p>{{p.ppp | currency}}</p>
+        </ion-label>
         <ion-buttons slot="end">
-          <ion-button color="danger" (click)="onDelete(p)">
+          <ion-button
+            color="danger"
+            (click)="onDelete(p); $event.stopPropagation();"
+          >
             <ion-icon name="trash"></ion-icon>
           </ion-button>
-        </ion-buttons> </ion-item
-    ></ion-col>
+        </ion-buttons>
+      </ion-item>
+    </ion-col>
   </ion-list>
 </ion-content>

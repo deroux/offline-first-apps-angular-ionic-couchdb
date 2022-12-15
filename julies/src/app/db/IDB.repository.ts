@@ -15,4 +15,5 @@ export default interface IDBRepository<T> {
     updateManually: Function
   ): void;
   createOrUpdate(doc: T): Promise<T>;
+  delete<T extends { _id: string; _rev: string }>(doc: T): Promise<T>;
 }

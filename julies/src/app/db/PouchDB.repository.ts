@@ -90,4 +90,8 @@ export default class PouchDBRepository<T> extends DBRepository<T> {
   createOrUpdate(doc: any): Promise<any> {
     return this.db.put(doc);
   }
+
+  delete<T extends { _id: string; _rev: string }>(doc: T): Promise<any> {
+    return this.db.remove(doc);
+  }
 }

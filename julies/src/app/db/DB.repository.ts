@@ -19,4 +19,5 @@ export abstract class DBRepository<T> implements IDBRepository<T> {
     updateManually: Function
   ): void;
   abstract createOrUpdate(doc: T): Promise<T>;
+  abstract delete<T extends { _id: string; _rev: string }>(doc: T): Promise<T>;
 }

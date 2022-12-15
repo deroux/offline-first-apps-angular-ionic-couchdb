@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="julies">Manage Products</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-col *ngFor="let p of products" class="ion-no-padding ion-no-margin">
+      <ion-item (click)="onSelect(p)">
+        <ion-label>
+          <h4>{{p.product}}</h4>
+          <p>{{p.category}}</p>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="danger" (click)="onDelete(p)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-buttons> </ion-item
+    ></ion-col>
+  </ion-list>
+</ion-content>

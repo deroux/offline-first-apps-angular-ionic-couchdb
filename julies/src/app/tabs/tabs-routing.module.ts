@@ -22,6 +22,20 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'crud-products',
+        loadChildren: () =>
+          import('../pages/crud-products/crud-products.module').then(
+            (m) => m.CrudProductsPageModule
+          ),
+      },
+      {
+        path: 'crud-tables',
+        loadChildren: () =>
+          import('../pages/crud-tables/crud-tables.module').then(
+            (m) => m.CrudTablesPageModule
+          ),
+      },
+      {
         path: '',
         redirectTo: '/tabs/tables',
         pathMatch: 'full',

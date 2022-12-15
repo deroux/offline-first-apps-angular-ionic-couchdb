@@ -19,7 +19,15 @@ const routes: Routes = [
   {
     path: 'kitchen',
     loadChildren: () => import('./pages/kitchen/kitchen.module').then( m => m.KitchenPageModule)
+  },  {
+    path: 'crud-products',
+    loadChildren: () => import('./pages/crud-products/crud-products.module').then( m => m.CrudProductsPageModule)
   },
+  {
+    path: 'crud-tables',
+    loadChildren: () => import('./pages/crud-tables/crud-tables.module').then( m => m.CrudTablesPageModule)
+  },
+
 ];
 @NgModule({
   imports: [

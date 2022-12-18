@@ -1,9 +1,77 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>crud-tables</ion-title>
+    <ion-title class="julies">Manage Tables</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button id="add-product-btn">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+      <ion-popover trigger="add-product-btn" triggerAction="click">
+        <ng-template>
+          <ion-content class="ion-padding">
+            <ion-item>
+              <ion-label position="floating">ID</ion-label>
+              <ion-input #id></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Guests</ion-label>
+              <ion-input #guests></ion-input>
+            </ion-item>
+            <ion-button
+              expand="block"
+              fill="outline"
+              (click)="addTable(id.value, guests.value)"
+              >Add</ion-button
+            >
+          </ion-content>
+        </ng-template>
+      </ion-popover>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <ion-col *ngFor="let t of tablesDocs" class="ion-no-padding ion-no-margin">
+      <ion-item id="edit-product-btn-{{t.table.id}}" triggerAction="click"
+        ><ion-popover
+          trigger="edit-product-btn-{{t.table.id}}"
+          triggerAction="click"
+        >
+          <ng-template>
+            <ion-content class="ion-padding">
+              <ion-item>
+                <ion-label position="floating">ID</ion-label>
+                <ion-input #id value="{{t.table.id}}"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Guests</ion-label>
+                <ion-input #guests value="{{t.table.guests}}"></ion-input>
+              </ion-item>
+              <ion-button
+                expand="block"
+                fill="outline"
+                (click)="editTable(t, id.value, guests.value)"
+                >Edit</ion-button
+              >
+            </ion-content>
+          </ng-template>
+        </ion-popover>
+        <ion-label>
+          <h4>{{t.table.id}}</h4>
+          <p>{{t.table.guests}} guests</p>
+        </ion-label>
+        <ion-buttons slot="end">
+          <ion-button
+            color="danger"
+            (click)="onDelete(t); $event.stopPropagation();"
+          >
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-col>
+  </ion-list>
 </ion-content>

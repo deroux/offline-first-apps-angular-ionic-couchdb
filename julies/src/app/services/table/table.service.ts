@@ -52,7 +52,7 @@ export class TableService {
       this.tablesSubject.next(tableDocs);
       tableDocs.forEach((doc: TableDoc) => {
         this.tableStateMachines.set(
-          doc.table.id,
+          doc.table.id.toString(),
           this.createStateMachine(doc.table.id, doc.table.state)
         );
       });
@@ -85,7 +85,7 @@ export class TableService {
     // update in pouchdb
     let idx = this.tablesSubject
       .getValue()
-      .findIndex((doc) => doc.table.id === tableId);
+      .findIndex((doc) => doc.table.id.toString() === tableId.toString());
     if (idx <= -1) {
       console.error(`Table ${tableId} index negative ${idx}`);
       return;

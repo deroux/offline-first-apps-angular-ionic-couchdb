@@ -1,7 +1,7 @@
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
 
-import { BehaviorSubject, from, map, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, from, map } from 'rxjs';
 import { DBRepository } from './DB.repository';
 
 export default class PouchDBRepository<T> extends DBRepository<T> {

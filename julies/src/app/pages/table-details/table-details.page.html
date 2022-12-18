@@ -18,7 +18,7 @@
 <ion-content>
   <ion-list class="split-screen-horizontal">
     <ion-item
-      *ngIf="prodConsumed === undefined || prodConsumed?.products === []"
+      *ngIf="prodConsumed === undefined || prodConsumed?.products?.length === 0"
     >
       <ion-label>
         <h4>No products consumed until now.</h4>

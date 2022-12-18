@@ -72,9 +72,20 @@ export default class PouchDBRepository<T> extends DBRepository<T> {
     return from(this.db.find(query)).pipe(map((obj: any) => obj['docs']));
   }
 
-  handleDocumentChange<T extends { _id?: string | undefined }>(
+  /**
+   * This function is used for handling change events on all documents passed,
+   * if passed document was found, the document is updated and the value is updated
+   * inside the passed subject.
+   *
+   * @param {BehaviorSubject<T[]>} subject  The subject to update on document exist.
+   * @param {T} changedDoc The document which has changed and needs to be propagated.
+   * @param {Function} updateManually If document not found, this passed function is called.
+   *
+   * @returns Nothing (void) but updates the passed subject.
+   */
+  handleDocumentChange<T extends { _id: string; _rev: string }>(
     subject: BehaviorSubject<T[]>,
-    changedDoc: any,
+    changedDoc: T,
     updateManually: Function
   ): void {
     let docs = subject.getValue();

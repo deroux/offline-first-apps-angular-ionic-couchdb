@@ -15,9 +15,7 @@ export class TableService {
   subscriptions: Array<Subscription> = [];
   tableStateMachines: Map<string, any> = new Map<string, any>();
 
-  constructor(private dbService: DBRepository<any>) {}
-
-  ngOnInit() {
+  constructor(private dbService: DBRepository<any>) {
     this.initChangeHandler();
     this.fetchTables();
   }

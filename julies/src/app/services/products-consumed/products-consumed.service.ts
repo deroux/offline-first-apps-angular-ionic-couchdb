@@ -15,9 +15,7 @@ export class ProductsConsumedService {
   subscriptions: Array<Subscription> = [];
   tableIdSubject: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  constructor(private dbService: DBRepository<any>) {}
-
-  ngOnInit() {
+  constructor(private dbService: DBRepository<any>) {
     let s = this.tableIdSubject.subscribe((tableId) => {
       this.fetchProductsConsumed(tableId);
       this.initChangeHandler(tableId);

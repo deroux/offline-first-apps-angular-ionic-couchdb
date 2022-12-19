@@ -12,9 +12,7 @@ export class ProductsService {
   );
   subscriptions: Array<Subscription> = [];
 
-  constructor(private dbService: DBRepository<any>) {}
-
-  ngOnInit() {
+  constructor(private dbService: DBRepository<any>) {
     this.fetchProducts();
     this.initChangeHandler();
   }

@@ -87,6 +87,14 @@
       </ion-buttons>
     </ion-item>
   </ion-list>
+  <ion-button
+    expand="block"
+    color="dark"
+    *ngIf="tableState === 'dirty'"
+    (click)="tableCleaned()"
+  >
+    Table clean <ion-icon name="trash-sharp" slot="end"></ion-icon>
+  </ion-button>
   <ion-grid class="split-screen-horizontal">
     <ion-row class="ion-no-padding">
       <ion-col size="9">

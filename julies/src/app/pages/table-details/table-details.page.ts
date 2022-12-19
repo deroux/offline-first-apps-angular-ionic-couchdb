@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Product, ProductsDoc } from 'src/app/model/products';
 import {
@@ -8,6 +9,8 @@ import {
 } from 'src/app/model/productsConsumed';
 import { ProductsConsumedService } from 'src/app/services/products-consumed/products-consumed.service';
 import { ProductsService } from 'src/app/services/products/products.service';
+import { TableService } from 'src/app/services/table/table.service';
+import { States } from 'src/app/shared/tablestate-machine';
 
 @Component({
   selector: 'app-table-details',
@@ -25,12 +28,16 @@ export class TableDetailsPage implements OnInit {
   subscriptions: Array<Subscription> = [];
   productCategories: Array<String> = [];
 
+  tableState: string = States.free;
+
   editted: boolean = false;
 
   constructor(
     private prodConsumedService: ProductsConsumedService,
     private productService: ProductsService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private tableService: TableService,
+    private navCtrl: NavController
   ) {}
 
   ngOnInit() {}
@@ -74,6 +81,15 @@ export class TableDetailsPage implements OnInit {
         ] as String[];
       });
 
+    let p3 = this.tableService.tablesSubject.subscribe((tables) => {
+      let idx = tables.findIndex((p) => {
+        return p.table.id.toString() === this.tableId.toString();
+      });
+      if (idx > -1) {
+        let tableDoc = tables[idx];
+        this.tableState = tableDoc.table.state;
+      }
+    });
     this.subscriptions.push(p, p2);
   }
 
@@ -227,5 +243,10 @@ export class TableDetailsPage implements OnInit {
       });
     }
     return consumedArray;
+  }
+
+  tableCleaned() {
+    this.tableService.nextState(this.tableId, States.free);
+    this.navCtrl.navigateBack('/tabs/tables');
   }
 }

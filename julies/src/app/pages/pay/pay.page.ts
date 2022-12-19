@@ -9,6 +9,8 @@ import {
 } from 'src/app/model/productsConsumed';
 import { BillService } from 'src/app/services/bill/bill.service';
 import { ProductsConsumedService } from 'src/app/services/products-consumed/products-consumed.service';
+import { TableService } from 'src/app/services/table/table.service';
+import { States } from 'src/app/shared/tablestate-machine';
 
 @Component({
   selector: 'app-pay',
@@ -29,7 +31,8 @@ export class PayPage implements OnInit {
     private activatedRoute: ActivatedRoute,
     private prodConsumedService: ProductsConsumedService,
     private alertCtrl: AlertController,
-    private billService: BillService
+    private billService: BillService,
+    private tableService: TableService
   ) {}
 
   ngOnInit() {}
@@ -137,12 +140,19 @@ export class PayPage implements OnInit {
           text: 'Confirm',
           role: 'confirm',
           handler: () => {
+            this.checkStatePaid();
             this.paidSelected();
           },
         },
       ],
     });
     await alert.present();
+  }
+
+  checkStatePaid() {
+    if (this.getTotalOutstanding() === 0) {
+      this.tableService.nextState(this.tableId, States.dirty);
+    }
   }
 
   paidSelected() {

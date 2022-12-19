@@ -1,4 +1,4 @@
-import OrderbyPipe from './orderby.pipe';
+import { OrderbyPipe } from './orderby.pipe';
 
 describe('OrderbyPipe', () => {
   it('create an instance', () => {

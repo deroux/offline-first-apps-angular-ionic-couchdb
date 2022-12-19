@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
+import { DBRepository } from 'src/app/db/DB.repository';
+import MockDBRepository from 'src/app/db/MockDB.repository';
+import { OrderbyPipe } from 'src/app/pipes/orderby.pipe';
 import { TablesPage } from './tables.page';
 
 describe('TablesPage', () => {
@@ -9,8 +12,9 @@ describe('TablesPage', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ TablesPage ],
-      imports: [IonicModule.forRoot()]
+      declarations: [TablesPage, OrderbyPipe],
+      imports: [IonicModule.forRoot()],
+      providers: [{ provide: DBRepository, useClass: MockDBRepository }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TablesPage);

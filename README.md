@@ -7,3 +7,5 @@ What is covered?
 - PouchDB & CouchDB Sync including 4-Way Data Binding to propagate changes in database to frontend
 - Repository Pattern for plugable frontend & backend storage solutions
 - Angular & Ionic development with models & so on..
+
+In the /julies directory you can find the waiters app with a working implementation of PouchDB and CouchDB.

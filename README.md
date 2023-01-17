@@ -9,3 +9,5 @@ What is covered?
 - Angular & Ionic development with models & so on..
 
 In the /julies directory you can find the waiters app with a working implementation of PouchDB and CouchDB.
+
+![Julies application](https://github.com/deroux/offline-first-apps-angular-ionic-couchdb/img/julies.png)
